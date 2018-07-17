@@ -17,6 +17,18 @@ class CMainComponentApp extends Component {
 
   }
 
+  CalculateBudget()
+  {
+      var currentDate = new Date();
+      var currentDayOfMonth = currentDate.getDate();
+      var currentDayOfWeek = currentDate.getDay();
+      console.log("Current day of Month == " + currentDayOfMonth);
+      console.log("Current day of Week  == " + currentDayOfWeek);
+
+      // Monday 1 ... Friday 5
+      
+  }
+
   GetLocationAsync = async () => {
 
   };
@@ -26,7 +38,7 @@ class CMainComponentApp extends Component {
   };
 
   componentDidMount() {
-
+      this.CalculateBudget();
   }
 
   /*
