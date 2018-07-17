@@ -19,11 +19,37 @@ class CMainComponentApp extends Component {
 
   CalculateBudget()
   {
-      var currentDate = new Date();
-      var currentDayOfMonth = currentDate.getDate();
-      var currentDayOfWeek = currentDate.getDay();
-      console.log("Current day of Month == " + currentDayOfMonth);
-      console.log("Current day of Week  == " + currentDayOfWeek);
+      // Current Date 
+	var currentDate = new Date();
+	var currentDayOfMonth = currentDate.getDate();
+
+	// Get Current Days of Month
+	var amountDaysOfCurrentMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)).getDate();
+
+	var AmountOfDays = 0;
+	AmountOfDays = 15 - currentDayOfMonth;
+	if(AmountOfDays < 0)
+	{
+		AmountOfDays = amountDaysOfCurrentMonth - currentDayOfMonth;
+	}
+
+	var validDays = 0;
+	for(var i = 0;  i <= AmountOfDays; ++i, ++currentDayOfMonth)
+	{
+		var DayofWeek = currentDayOfMonth % 7;
+		if(DayofWeek > 0 && DayofWeek < 6)
+		{
+			++validDays;     
+		}
+	}
+
+	var CurrentPrice = (validDays * 2)
+	if(currentDate.getHours() > 10)
+	{
+	--CurrentPrice;
+	}
+
+	CurrentPrice *= 15;
 
       // Monday 1 ... Friday 5
       
