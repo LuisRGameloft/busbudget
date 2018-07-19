@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
+  Button,
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 
@@ -64,16 +65,13 @@ class CMainComponentApp extends Component {
       this.setState({busNextPrice : (validDaysNext * valueBusPrice)});
   }
 
-  GetLocationAsync = async () => {
-
-  };
-
-  Checkpermissions = async () => {
-
-  };
+  onPressBusbudgetButton()
+  {
+      this.CalculateBudget();
+  }
 
   componentDidMount() {
-      this.CalculateBudget();
+      //this.CalculateBudget();
   }
 
   render() {
@@ -91,6 +89,12 @@ class CMainComponentApp extends Component {
         <Text style={styles.welcome}>$ {this.state.busCurrentPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}</Text>
         <Text style={styles.welcome}>Next Budget</Text>
         <Text style={styles.welcome}>$ {this.state.busNextPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}</Text>
+        <Button
+          onPress={this.onPressBusbudgetButton.bind(this)}
+          title="Calculate Bus"
+          color="#841584"
+          accessibilityLabel="Calculate Bus budget"
+        />
       </View>
     );
   }
