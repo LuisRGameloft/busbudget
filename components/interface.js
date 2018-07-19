@@ -50,17 +50,23 @@ class CMainComponentApp extends Component {
       var validDaysCurrent = this.CalculateDays(currentDayOfMonth, amountDaysOfCurrentMonth);
 
       valueBusPrice = Number(this.state.busPrice);
-      this.setState({busCurrentPrice : (validDaysCurrent * valueBusPrice)});
+
+      var CalculateDaysCurrent = (validDaysCurrent * 2);
+      if(currentDate.getHours() > 10)
+      {
+         --CalculateDaysCurrent;
+      }
+      this.setState({busCurrentPrice : CalculateDaysCurrent * valueBusPrice});
 
       var validDaysNext = 0;
       if(currentDayOfMonth > 15)
       {
          var amountDaysOfNextMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 0)).getDate();
-         validDaysNext = this.CalculateDays(1, amountDaysOfNextMonth);
+         validDaysNext = this.CalculateDays(1, amountDaysOfNextMonth) * 2;
       }
       else
       {
-         validDaysNext = this.CalculateDays(15, amountDaysOfCurrentMonth);
+         validDaysNext = this.CalculateDays(15, amountDaysOfCurrentMonth) * 2;
       }
       this.setState({busNextPrice : (validDaysNext * valueBusPrice)});
   }
