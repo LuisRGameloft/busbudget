@@ -47,7 +47,11 @@ class CMainComponentApp extends Component {
       var currentDate = new Date();
       var currentDayOfMonth = currentDate.getDate();
       var amountDaysOfCurrentMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)).getDate();
+      console.log('[Current] Day == ' + currentDayOfMonth);
+      console.log('[Current] total month == ' + amountDaysOfCurrentMonth);
+
       var validDaysCurrent = this.CalculateDays(currentDayOfMonth, amountDaysOfCurrentMonth);
+      console.log('[Current] Calculated == ' + validDaysCurrent);
 
       valueBusPrice = Number(this.state.busPrice);
 
@@ -62,7 +66,9 @@ class CMainComponentApp extends Component {
       if(currentDayOfMonth > 15)
       {
          var amountDaysOfNextMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 0)).getDate();
+         console.log('[Next] total month ==  ' + amountDaysOfNextMonth);
          validDaysNext = this.CalculateDays(1, amountDaysOfNextMonth) * 2;
+         console.log('[Next] Calculated == ' + validDaysNext);
       }
       else
       {
