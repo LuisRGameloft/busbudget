@@ -21,14 +21,7 @@ class CMainComponentApp extends Component {
 
   CalculateDays(currentDay, amountDaysOfMonth)
   {
-      // Current Date
-	     //var currentDate = new Date();
-	     //var currentDayOfMonth = currentDate.getDate();
-
-	     // Get Current Days of Month
-	     //var amountDaysOfCurrentMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)).getDate();
-
-	     var AmountOfDays = 0;
+       var AmountOfDays = 0;
 	     AmountOfDays = 15 - currentDay;
 	     if(AmountOfDays < 0)
 	     {
@@ -46,14 +39,6 @@ class CMainComponentApp extends Component {
 	     }
 
        return validDays;
-
-       /*var CurrentPrice = (validDays * 2)
-       if(currentDate.getHours() > 10)
-       {
-          --CurrentPrice;
-       }
-
-	      return CurrentPrice *= 15;*/
   }
 
   CalculateBudget()
@@ -61,8 +46,20 @@ class CMainComponentApp extends Component {
       var currentDate = new Date();
       var currentDayOfMonth = currentDate.getDate();
       var amountDaysOfCurrentMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)).getDate();
-      var validDays = this.CalculateDays(currentDayOfMonth, amountDaysOfCurrentMonth);
-      this.setState({busCurrentPrice : validDays});
+      var validDaysCurrent = this.CalculateDays(currentDayOfMonth, amountDaysOfCurrentMonth);
+      this.setState({busCurrentPrice : validDaysCurrent});
+
+      var validDaysNext = 0;
+      if(currentDayOfMonth > 15)
+      {
+         var amountDaysOfNextMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 0)).getDate();
+         validDaysNext = this.CalculateDays(1, amountDaysOfNextMonth);
+      }
+      else
+      {
+         validDaysNext = this.CalculateDays(15, amountDaysOfCurrentMonth);
+      }
+      this.setState({busNextPrice : validDaysNext});
   }
 
   GetLocationAsync = async () => {
@@ -94,7 +91,7 @@ class CMainComponentApp extends Component {
         <Text style={styles.welcome}>Current Budget</Text>
         <Text style={styles.welcome}>{String(this.state.busCurrentPrice)}</Text>
         <Text style={styles.welcome}>Next Budget</Text>
-        <Text style={styles.welcome}>0.00</Text>
+        <Text style={styles.welcome}>{String(this.state.busNextPrice)}</Text>
       </View>
     );
   }
