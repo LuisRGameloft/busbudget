@@ -12,47 +12,57 @@ class CMainComponentApp extends Component {
     super(props);
 
     this.state = {
-      busPrice: '',
+      busPrice: "",
+      busCurrentPrice: 0.0,
+      busNextPrice: 0.0,
     };
 
   }
 
+  CalculateDays(currentDay, amountDaysOfMonth)
+  {
+      // Current Date
+	     //var currentDate = new Date();
+	     //var currentDayOfMonth = currentDate.getDate();
+
+	     // Get Current Days of Month
+	     //var amountDaysOfCurrentMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)).getDate();
+
+	     var AmountOfDays = 0;
+	     AmountOfDays = 15 - currentDay;
+	     if(AmountOfDays < 0)
+	     {
+		       AmountOfDays = amountDaysOfMonth - currentDay;
+	     }
+
+	     var validDays = 0;
+       for(var i = 0;  i <= AmountOfDays; ++i, ++currentDay)
+       {
+          var DayofWeek = currentDay % 7;
+          if(DayofWeek > 0 && DayofWeek < 6)
+          {
+              ++validDays;
+          }
+	     }
+
+       return validDays;
+
+       /*var CurrentPrice = (validDays * 2)
+       if(currentDate.getHours() > 10)
+       {
+          --CurrentPrice;
+       }
+
+	      return CurrentPrice *= 15;*/
+  }
+
   CalculateBudget()
   {
-      // Current Date 
-	var currentDate = new Date();
-	var currentDayOfMonth = currentDate.getDate();
-
-	// Get Current Days of Month
-	var amountDaysOfCurrentMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)).getDate();
-
-	var AmountOfDays = 0;
-	AmountOfDays = 15 - currentDayOfMonth;
-	if(AmountOfDays < 0)
-	{
-		AmountOfDays = amountDaysOfCurrentMonth - currentDayOfMonth;
-	}
-
-	var validDays = 0;
-	for(var i = 0;  i <= AmountOfDays; ++i, ++currentDayOfMonth)
-	{
-		var DayofWeek = currentDayOfMonth % 7;
-		if(DayofWeek > 0 && DayofWeek < 6)
-		{
-			++validDays;     
-		}
-	}
-
-	var CurrentPrice = (validDays * 2)
-	if(currentDate.getHours() > 10)
-	{
-	--CurrentPrice;
-	}
-
-	CurrentPrice *= 15;
-
-      // Monday 1 ... Friday 5
-      
+      var currentDate = new Date();
+      var currentDayOfMonth = currentDate.getDate();
+      var amountDaysOfCurrentMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)).getDate();
+      var validDays = this.CalculateDays(currentDayOfMonth, amountDaysOfCurrentMonth);
+      this.setState({busCurrentPrice : validDays});
   }
 
   GetLocationAsync = async () => {
@@ -82,7 +92,7 @@ class CMainComponentApp extends Component {
             onChangeText={ (busPrice) => this.setState({ busPrice }) }
         />
         <Text style={styles.welcome}>Current Budget</Text>
-        <Text style={styles.welcome}>0.00</Text>
+        <Text style={styles.welcome}>{String(this.state.busCurrentPrice)}</Text>
         <Text style={styles.welcome}>Next Budget</Text>
         <Text style={styles.welcome}>0.00</Text>
       </View>
