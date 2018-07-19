@@ -47,7 +47,9 @@ class CMainComponentApp extends Component {
       var currentDayOfMonth = currentDate.getDate();
       var amountDaysOfCurrentMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)).getDate();
       var validDaysCurrent = this.CalculateDays(currentDayOfMonth, amountDaysOfCurrentMonth);
-      this.setState({busCurrentPrice : validDaysCurrent});
+
+      valueBusPrice = Number(this.state.busPrice);
+      this.setState({busCurrentPrice : (validDaysCurrent * valueBusPrice)});
 
       var validDaysNext = 0;
       if(currentDayOfMonth > 15)
@@ -59,7 +61,7 @@ class CMainComponentApp extends Component {
       {
          validDaysNext = this.CalculateDays(15, amountDaysOfCurrentMonth);
       }
-      this.setState({busNextPrice : validDaysNext});
+      this.setState({busNextPrice : (validDaysNext * valueBusPrice)});
   }
 
   GetLocationAsync = async () => {
@@ -74,9 +76,6 @@ class CMainComponentApp extends Component {
       this.CalculateBudget();
   }
 
-  /*
-
-  */
   render() {
     let { busPrice } = this.state;
     return (
@@ -89,9 +88,9 @@ class CMainComponentApp extends Component {
             onChangeText={ (busPrice) => this.setState({ busPrice }) }
         />
         <Text style={styles.welcome}>Current Budget</Text>
-        <Text style={styles.welcome}>{String(this.state.busCurrentPrice)}</Text>
+        <Text style={styles.welcome}>$ {this.state.busCurrentPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}</Text>
         <Text style={styles.welcome}>Next Budget</Text>
-        <Text style={styles.welcome}>{String(this.state.busNextPrice)}</Text>
+        <Text style={styles.welcome}>$ {this.state.busNextPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}</Text>
       </View>
     );
   }
