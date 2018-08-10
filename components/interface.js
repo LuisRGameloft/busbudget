@@ -4,6 +4,7 @@ import {
   View,
   Text,
   Button,
+  AsyncStorage,
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 
@@ -13,9 +14,9 @@ class CMainComponentApp extends Component {
     super(props);
 
     this.state = {
-      busPrice: "",
-      busCurrentPrice: 0.0,
-      busNextPrice: 0.0,
+        busPrice: "",
+        busCurrentPrice: 0.0,
+        busNextPrice: 0.0,
     };
 
   }
@@ -41,8 +42,31 @@ class CMainComponentApp extends Component {
        return validDays;
   }
 
+  async _storeData () 
+  {
+      try 
+      {
+          var valueBusPrice = this.state.busPrice;
+          await AsyncStorage.setItem('value', this.state.busPrice);
+          return valueBusPrice;
+      } 
+      catch (error) 
+      {
+          console.log('Error =' + error);  
+          console.log('Error saving data');
+      }
+  }
+
   CalculateBudget()
   {
+      // Save value
+      this._storeData().then((result) => {
+          console.log('Save Value ' + result);
+      }).catch((error) => 
+      {
+          console.log('Error saving data');
+      });
+    
       var currentDate = new Date();
       var currentDayOfMonth = currentDate.getDate();
       var amountDaysOfCurrentMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)).getDate();
@@ -94,8 +118,32 @@ class CMainComponentApp extends Component {
       this.CalculateBudget();
   }
 
+  async _retrieveData () 
+  {
+      try 
+      {
+          const value = await AsyncStorage.getItem('value');
+          return value;
+      } 
+      catch (error) 
+      {
+          console.log('No Value retrieved');
+      }
+  }
+
   componentDidMount() {
-      //this.CalculateBudget();
+      this._retrieveData().then((result) => {
+
+          console.log('Get Value ' + result);
+          if(result != null)
+          {
+              this.setState({busPrice : result});
+          }
+
+      }).catch((error) => 
+      {
+          console.log('No Value Exeception');
+      });
   }
 
   render() {
@@ -114,10 +162,10 @@ class CMainComponentApp extends Component {
         <Text style={styles.welcome}>Next Budget</Text>
         <Text style={styles.welcome}>$ {this.state.busNextPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}</Text>
         <Button
-          onPress={this.onPressBusbudgetButton.bind(this)}
-          title="Calculate Bus"
-          color="#841584"
-          accessibilityLabel="Calculate Bus budget"
+            onPress={this.onPressBusbudgetButton.bind(this)}
+            title="Calculate Bus"
+            color="#841584"
+            accessibilityLabel="Calculate Bus budget"
         />
       </View>
     );
@@ -126,8 +174,8 @@ class CMainComponentApp extends Component {
 
 const styles = StyleSheet.create({
     container: {
-      margin: 8,
-      marginTop: 24,
+        margin: 8,
+        marginTop: 24,
       },
       welcome: {
         fontSize: 20,
