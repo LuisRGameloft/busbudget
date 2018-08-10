@@ -20,25 +20,24 @@ class CMainComponentApp extends Component {
 
   }
 
-  CalculateDays(currentDay, amountDaysOfMonth)
+  CalculateDays(currentDay, amountDaysOfMonth, currentDayOfWeek)
   {
        var AmountOfDays = 0;
 	     AmountOfDays = 15 - currentDay;
-	     if(AmountOfDays < 0)
+	     if(AmountOfDays <= 0)
 	     {
 		       AmountOfDays = amountDaysOfMonth - currentDay;
 	     }
 
 	     var validDays = 0;
-       for(var i = 0;  i <= AmountOfDays; ++i, ++currentDay)
+       for(var i = 0;  i <= AmountOfDays; ++i, ++currentDayOfWeek)
        {
-          var DayofWeek = currentDay % 7;
+          var DayofWeek = currentDayOfWeek % 7;
           if(DayofWeek > 0 && DayofWeek < 6)
           {
               ++validDays;
           }
 	     }
-
        return validDays;
   }
 
@@ -47,10 +46,12 @@ class CMainComponentApp extends Component {
       var currentDate = new Date();
       var currentDayOfMonth = currentDate.getDate();
       var amountDaysOfCurrentMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)).getDate();
+      var dayOfWeek = currentDate.getDay();
       console.log('[Current] Day == ' + currentDayOfMonth);
       console.log('[Current] total month == ' + amountDaysOfCurrentMonth);
+      console.log('[Current] Day of Week == ' + dayOfWeek);
 
-      var validDaysCurrent = this.CalculateDays(currentDayOfMonth, amountDaysOfCurrentMonth);
+      var validDaysCurrent = this.CalculateDays(currentDayOfMonth, amountDaysOfCurrentMonth, dayOfWeek);
       console.log('[Current] Calculated == ' + validDaysCurrent);
 
       valueBusPrice = Number(this.state.busPrice);
@@ -65,14 +66,25 @@ class CMainComponentApp extends Component {
       var validDaysNext = 0;
       if(currentDayOfMonth > 15)
       {
-         var amountDaysOfNextMonth = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 0)).getDate();
-         console.log('[Next] total month ==  ' + amountDaysOfNextMonth);
-         validDaysNext = this.CalculateDays(1, amountDaysOfNextMonth) * 2;
-         console.log('[Next] Calculated == ' + validDaysNext);
+          console.log('[Next Month]  == ');
+          var newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 1);
+          var amountDaysOfNextMonth = newDate.getDate();
+          var nextCurrentDayOfWeek = newDate.getDay();
+          console.log('[Next Month] total month ==  ' + amountDaysOfNextMonth);
+          console.log('[Next Month] Day of Week ==  ' + nextCurrentDayOfWeek);
+          validDaysNext = this.CalculateDays(1, amountDaysOfNextMonth, nextCurrentDayOfWeek) * 2;
+          console.log('[Next Month] Calculated == ' + validDaysNext);
       }
       else
       {
-         validDaysNext = this.CalculateDays(15, amountDaysOfCurrentMonth) * 2;
+          console.log('[Next Quarter]  ==  '); 
+          var newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 15);
+          nextCurrentDayOfWeek = newDate.getDay();
+          console.log('[Next Quarter] total Quarter ==  ' + amountDaysOfCurrentMonth);
+          console.log('[Next Quarter] Day of Week ==  ' + nextCurrentDayOfWeek);
+          validDaysNext = this.CalculateDays(15, amountDaysOfCurrentMonth, nextCurrentDayOfWeek) * 2;
+          console.log('[Next Quarter] Calculated == ' + validDaysNext);
+
       }
       this.setState({busNextPrice : (validDaysNext * valueBusPrice)});
   }
