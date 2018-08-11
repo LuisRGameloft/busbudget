@@ -3,9 +3,10 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
   AsyncStorage,
 } from 'react-native';
+import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextField } from 'react-native-material-textfield';
 
 
@@ -152,7 +153,7 @@ class CMainComponentApp extends Component {
     let { busPrice } = this.state;
     return (
       <View style={styles.container} >
-        <Text style={styles.welcome}>Whiso !</Text>
+        <Text style={styles.welcome}>Bus Calculate</Text>
         <TextField
             style={styles.welcome}
             label='Bus Price'
@@ -165,9 +166,16 @@ class CMainComponentApp extends Component {
         <Text style={styles.welcome}>$ {this.state.busNextPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}</Text>
         <Button
             onPress={this.onPressBusbudgetButton.bind(this)}
-            title="Calculate Bus"
-            color="#841584"
-            accessibilityLabel="Calculate Bus budget"
+            title="Calculate"
+            titleStyle={{ fontWeight: "700" }}
+            buttonStyle={{
+                backgroundColor: "rgba(92, 99,216, 1)",
+                width: 300,
+                height: 45,
+                borderColor: "transparent",
+                borderWidth: 0,
+                borderRadius: 5
+            }}
         />
       </View>
     );
