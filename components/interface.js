@@ -5,10 +5,22 @@ import {
   Text,
   AsyncStorage,
 } from 'react-native';
-import { Button } from 'react-native-elements';
+import { PricingCard } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { TextField } from 'react-native-material-textfield';
-
+import {
+    Kaede,
+    Hoshi,
+    Jiro,
+    Isao,
+    Madoka,
+    Akira,
+    Hideo,
+    Kohana,
+    Makiko,
+    Sae,
+    Fumi,
+  } from 'react-native-textinput-effects';
+import { TextInputMask } from 'react-native-masked-text'
 
 class CMainComponentApp extends Component {
   constructor(props) {
@@ -18,6 +30,7 @@ class CMainComponentApp extends Component {
         busPrice: "",
         busCurrentPrice: 0.0,
         busNextPrice: 0.0,
+        birthday: '',
     };
 
   }
@@ -79,7 +92,7 @@ class CMainComponentApp extends Component {
       var validDaysCurrent = this.CalculateDays(currentDayOfMonth, amountDaysOfCurrentMonth, dayOfWeek);
       console.log('[Current] Calculated == ' + validDaysCurrent);
 
-      valueBusPrice = Number(this.state.busPrice);
+      valueBusPrice = Number(this.state.busPrice.replace(/[^0-9\.-]+/g,""));
 
       var CalculateDaysCurrent = (validDaysCurrent * 2);
       if(currentDate.getHours() > 10)
@@ -150,33 +163,38 @@ class CMainComponentApp extends Component {
   }
 
   render() {
-    let { busPrice } = this.state;
+    var formmattedPrice     = this.state.busCurrentPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+    var formmattedNextPrice = this.state.busNextPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
+    var myInfo = ['Siguiente Periodo'];
+    myInfo.push('$ ' + formmattedNextPrice);
+
     return (
       <View style={styles.container} >
-        <Text style={styles.welcome}>Bus Calculate</Text>
-        <TextField
-            style={styles.welcome}
-            label='Bus Price'
-            value= {busPrice}
-            onChangeText={ (busPrice) => this.setState({ busPrice }) }
+        <Text style={styles.welcome}>Bus Budget</Text>
+        <TextInputMask
+                refInput={(ref) => this.myDateText = ref}
+                customTextInput={Madoka}
+				type={'money'}
+				options={{
+                    unit: '$ ',
+                    separator: ".",
+                    delimiter: ",",
+                }}
+                placeholder="Ingresa precio"
+                style={styles.welcome}
+                onChangeText={busPrice => this.setState({ busPrice })}
+                value={this.state.busPrice}
+         	/>
+        
+        <PricingCard
+            color='#4f9deb'
+            title='Bus Budget'
+            price={'$ ' + formmattedPrice}
+            info={myInfo}
+            button={{ title: 'Calculate' }}
+            onButtonPress={this.onPressBusbudgetButton.bind(this)} 
         />
-        <Text style={styles.welcome}>Current Budget</Text>
-        <Text style={styles.welcome}>$ {this.state.busCurrentPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}</Text>
-        <Text style={styles.welcome}>Next Budget</Text>
-        <Text style={styles.welcome}>$ {this.state.busNextPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}</Text>
-        <Button
-            onPress={this.onPressBusbudgetButton.bind(this)}
-            title="Calculate"
-            titleStyle={{ fontWeight: "700" }}
-            buttonStyle={{
-                backgroundColor: "rgba(92, 99,216, 1)",
-                width: 300,
-                height: 45,
-                borderColor: "transparent",
-                borderWidth: 0,
-                borderRadius: 5
-            }}
-        />
+        
       </View>
     );
   }
@@ -184,8 +202,8 @@ class CMainComponentApp extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 8,
-        marginTop: 24,
+        alignItems: 'stretch',
+        justifyContent: 'center',
       },
       welcome: {
         fontSize: 20,
