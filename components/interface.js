@@ -38,13 +38,13 @@ class CMainComponentApp extends Component {
   CalculateDays(currentDay, amountDaysOfMonth, currentDayOfWeek)
   {
        var AmountOfDays = 0;
-	     AmountOfDays = 15 - currentDay;
-	     if(AmountOfDays <= 0)
-	     {
-		       AmountOfDays = amountDaysOfMonth - currentDay;
-	     }
+	   AmountOfDays = 15 - currentDay;
+	   if(AmountOfDays <= 0)
+	   {
+		    AmountOfDays = amountDaysOfMonth - currentDay + 1;
+	   }
 
-	     var validDays = 0;
+	   var validDays = 0;
        for(var i = 0;  i <= AmountOfDays; ++i, ++currentDayOfWeek)
        {
           var DayofWeek = currentDayOfWeek % 7;
@@ -110,7 +110,7 @@ class CMainComponentApp extends Component {
           var nextCurrentDayOfWeek = newDate.getDay();
           console.log('[Next Month] total month ==  ' + amountDaysOfNextMonth);
           console.log('[Next Month] Day of Week ==  ' + nextCurrentDayOfWeek);
-          validDaysNext = this.CalculateDays(1, amountDaysOfNextMonth, nextCurrentDayOfWeek) * 2;
+          validDaysNext = this.CalculateDays(1, amountDaysOfNextMonth, nextCurrentDayOfWeek);
           console.log('[Next Month] Calculated == ' + validDaysNext);
       }
       else
@@ -120,11 +120,11 @@ class CMainComponentApp extends Component {
           nextCurrentDayOfWeek = newDate.getDay();
           console.log('[Next Quarter] total Quarter ==  ' + amountDaysOfCurrentMonth);
           console.log('[Next Quarter] Day of Week ==  ' + nextCurrentDayOfWeek);
-          validDaysNext = this.CalculateDays(15, amountDaysOfCurrentMonth, nextCurrentDayOfWeek) * 2;
+          validDaysNext = this.CalculateDays(15, amountDaysOfCurrentMonth, nextCurrentDayOfWeek);
           console.log('[Next Quarter] Calculated == ' + validDaysNext);
 
       }
-      this.setState({busNextPrice : (validDaysNext * valueBusPrice)});
+      this.setState({busNextPrice : (validDaysNext * valueBusPrice * 2)});
   }
 
   onPressBusbudgetButton()
@@ -184,6 +184,7 @@ class CMainComponentApp extends Component {
                 style={styles.welcome}
                 onChangeText={busPrice => this.setState({ busPrice })}
                 value={this.state.busPrice}
+                onFocus={() => this.setState({ busPrice: "" })}
          	/>
         
         <PricingCard
