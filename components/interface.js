@@ -138,6 +138,8 @@ class CMainComponentApp extends Component {
           if(result != null)
           {
               this.setState({busPrice : result});
+              // automatic re-calculate
+              this.CalculateBudget();
           }
 
       }).catch((error) => 
