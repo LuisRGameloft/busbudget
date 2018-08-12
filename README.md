@@ -11,7 +11,7 @@ How to start
 
 #### Additional credits
 
-Thanks to [Freepik](www.flaticon.com) for icon of this app
+Thanks to [Freepik](http://www.flaticon.com) for icon of this app
 
 
 ### Todos
