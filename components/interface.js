@@ -39,33 +39,28 @@ class CMainComponentApp extends Component {
   {
        var AmountOfDays = 0;
 	   AmountOfDays = 15 - currentDay;
-	   if(AmountOfDays <= 0)
-	   {
+	   if(AmountOfDays <= 0) {
 		    AmountOfDays = amountDaysOfMonth - currentDay + 1;
 	   }
 
 	   var validDays = 0;
-       for(var i = 0;  i <= AmountOfDays; ++i, ++currentDayOfWeek)
-       {
-          var DayofWeek = currentDayOfWeek % 7;
-          if(DayofWeek > 0 && DayofWeek < 6)
-          {
+       for(var i = 0;  i <= AmountOfDays; ++i, ++currentDayOfWeek) {
+            var DayofWeek = currentDayOfWeek % 7;
+            if(DayofWeek > 0 && DayofWeek < 6) {
               ++validDays;
-          }
-	     }
+            }
+	    }
        return validDays;
   }
 
   async _storeData () 
   {
-      try 
-      {
+      try {
           var valueBusPrice = this.state.busPrice;
           await AsyncStorage.setItem('value', this.state.busPrice);
           return valueBusPrice;
       } 
-      catch (error) 
-      {
+      catch (error) {
           console.log('Error =' + error);  
           console.log('Error saving data');
       }
@@ -76,8 +71,7 @@ class CMainComponentApp extends Component {
       // Save value
       this._storeData().then((result) => {
           console.log('Save Value ' + result);
-      }).catch((error) => 
-      {
+      }).catch((error) => {
           console.log('Error saving data');
       });
     
@@ -95,15 +89,13 @@ class CMainComponentApp extends Component {
       valueBusPrice = Number(this.state.busPrice.replace(/[^0-9\.-]+/g,""));
 
       var CalculateDaysCurrent = (validDaysCurrent * 2);
-      if(currentDate.getHours() > 10)
-      {
+      if(currentDate.getHours() > 10) {
          --CalculateDaysCurrent;
       }
       this.setState({busCurrentPrice : CalculateDaysCurrent * valueBusPrice});
 
       var validDaysNext = 0;
-      if(currentDayOfMonth > 15)
-      {
+      if(currentDayOfMonth > 15) {
           console.log('[Next Month]  == ');
           var newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 1);
           var amountDaysOfNextMonth = newDate.getDate();
@@ -113,8 +105,7 @@ class CMainComponentApp extends Component {
           validDaysNext = this.CalculateDays(1, amountDaysOfNextMonth, nextCurrentDayOfWeek);
           console.log('[Next Month] Calculated == ' + validDaysNext);
       }
-      else
-      {
+      else {
           console.log('[Next Quarter]  ==  '); 
           var newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 15);
           nextCurrentDayOfWeek = newDate.getDay();
@@ -122,7 +113,6 @@ class CMainComponentApp extends Component {
           console.log('[Next Quarter] Day of Week ==  ' + nextCurrentDayOfWeek);
           validDaysNext = this.CalculateDays(15, amountDaysOfCurrentMonth, nextCurrentDayOfWeek);
           console.log('[Next Quarter] Calculated == ' + validDaysNext);
-
       }
       this.setState({busNextPrice : (validDaysNext * valueBusPrice * 2)});
   }
@@ -134,35 +124,33 @@ class CMainComponentApp extends Component {
 
   async _retrieveData () 
   {
-      try 
-      {
+      try {
           const value = await AsyncStorage.getItem('value');
           return value;
       } 
-      catch (error) 
-      {
+      catch (error) {
           console.log('No Value retrieved');
       }
   }
 
-  componentDidMount() {
+  componentDidMount() 
+  {
       this._retrieveData().then((result) => {
 
           console.log('Get Value ' + result);
-          if(result != null)
-          {
+          if(result != null) {
               this.setState({busPrice : result});
               // automatic re-calculate
               this.CalculateBudget();
           }
 
-      }).catch((error) => 
-      {
+      }).catch((error) => {
           console.log('No Value Exeception');
       });
   }
 
-  render() {
+  render() 
+  {
     var formmattedPrice     = this.state.busCurrentPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
     var formmattedNextPrice = this.state.busNextPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
     var myInfo = ['Siguiente Periodo'];
