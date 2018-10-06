@@ -40,7 +40,10 @@ class CMainComponentApp extends Component {
        var AmountOfDays = 0;
 	   AmountOfDays = 15 - currentDay;
 	   if(AmountOfDays <= 0) {
-		    AmountOfDays = amountDaysOfMonth - currentDay + 1;
+            AmountOfDays = ((amountDaysOfMonth > 30)? 30:amountDaysOfMonth) - currentDay + 1;
+            if (AmountOfDays <= 0) {
+                AmountOfDays = 1;
+            }
 	   }
 
 	   var validDays = 0;
@@ -89,7 +92,7 @@ class CMainComponentApp extends Component {
       valueBusPrice = Number(this.state.busPrice.replace(/[^0-9\.-]+/g,""));
 
       var CalculateDaysCurrent = (validDaysCurrent * 2);
-      if(currentDate.getHours() > 10) {
+      if(CalculateDaysCurrent > 0 && currentDate.getHours() > 10) {
          --CalculateDaysCurrent;
       }
       this.setState({busCurrentPrice : CalculateDaysCurrent * valueBusPrice});
