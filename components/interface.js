@@ -4,6 +4,7 @@ import {
   View,
   Text,
   AsyncStorage,
+  AppState,
 } from 'react-native';
 import { PricingCard } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -35,24 +36,24 @@ class CMainComponentApp extends Component {
 
   }
 
-  CalculateDays(currentDay, amountDaysOfMonth, currentDayOfWeek)
+  CalculateDays(currentDay, amountDaysOfMonth, currentDayOfWeek) 
   {
        var AmountOfDays = 0;
 	   AmountOfDays = 15 - currentDay;
 	   if(AmountOfDays <= 0) {
-            AmountOfDays = ((amountDaysOfMonth > 30)? 30:amountDaysOfMonth) - currentDay + 1;
-            if (AmountOfDays <= 0) {
-                AmountOfDays = 1;
-            }
+           AmountOfDays = ((amountDaysOfMonth > 30)? 30:amountDaysOfMonth) - currentDay + 1;
+           if (AmountOfDays <= 0) {
+               AmountOfDays = 1;
+           }
 	   }
 
 	   var validDays = 0;
        for(var i = 0;  i <= AmountOfDays; ++i, ++currentDayOfWeek) {
-            var DayofWeek = currentDayOfWeek % 7;
-            if(DayofWeek > 0 && DayofWeek < 6) {
-              ++validDays;
-            }
-	    }
+           var DayofWeek = currentDayOfWeek % 7;
+           if(DayofWeek > 0 && DayofWeek < 6) {
+               ++validDays;
+           }
+	   }
        return validDays;
   }
 
@@ -93,7 +94,7 @@ class CMainComponentApp extends Component {
 
       var CalculateDaysCurrent = (validDaysCurrent * 2);
       if(CalculateDaysCurrent > 0 && currentDate.getHours() > 10) {
-         --CalculateDaysCurrent;
+          --CalculateDaysCurrent;
       }
       this.setState({busCurrentPrice : CalculateDaysCurrent * valueBusPrice});
 
@@ -120,7 +121,7 @@ class CMainComponentApp extends Component {
       this.setState({busNextPrice : (validDaysNext * valueBusPrice * 2)});
   }
 
-  onPressBusbudgetButton()
+  onPressBusbudgetButton() 
   {
       this.CalculateBudget();
   }
@@ -136,30 +137,46 @@ class CMainComponentApp extends Component {
       }
   }
 
-  componentDidMount() 
+  refreshCalculateData() 
   {
       this._retrieveData().then((result) => {
-
           console.log('Get Value ' + result);
           if(result != null) {
               this.setState({busPrice : result});
               // automatic re-calculate
               this.CalculateBudget();
           }
-
       }).catch((error) => {
-          console.log('No Value Exeception');
+          console.log('No Value Exception');
       });
+  }
+
+  _handleAppStateChange = (nextAppState) => 
+  {
+      if (nextAppState === 'active') {
+          console.log('App has come to the foreground!')
+          this.refreshCalculateData();
+      }
+  }
+
+  componentDidMount() 
+  {
+      AppState.addEventListener('change', this._handleAppStateChange);
+  }
+
+  componentWillUnmount() 
+  {
+      AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   render() 
   {
-    var formmattedPrice     = this.state.busCurrentPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-    var formmattedNextPrice = this.state.busNextPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
-    var myInfo = ['Siguiente Periodo'];
-    myInfo.push('$ ' + formmattedNextPrice);
+      var formmattedPrice     = this.state.busCurrentPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+      var formmattedNextPrice = this.state.busNextPrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
+      var myInfo = ['Siguiente Periodo'];
+      myInfo.push('$ ' + formmattedNextPrice);
 
-    return (
+      return ( 
       <View style={styles.container} >
         <Text style={styles.welcome}>Bus Budget</Text>
         <TextInputMask
@@ -186,9 +203,8 @@ class CMainComponentApp extends Component {
             button={{ title: 'Calculate' }}
             onButtonPress={this.onPressBusbudgetButton.bind(this)} 
         />
-        
       </View>
-    );
+      );
   }
 }
 
