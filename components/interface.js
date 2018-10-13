@@ -93,7 +93,12 @@ class CMainComponentApp extends Component {
       valueBusPrice = Number(this.state.busPrice.replace(/[^0-9\.-]+/g,""));
 
       var CalculateDaysCurrent = (validDaysCurrent * 2);
-      if(CalculateDaysCurrent > 0 && currentDate.getHours() > 10) {
+      // if Hour is > than 10 am that means first travel was made
+      if((CalculateDaysCurrent > 0) && (currentDate.getHours() > 10) && (dayOfWeek > 0 && dayOfWeek < 6)) {
+          --CalculateDaysCurrent;
+      }
+      // if Hour is > than 10 pm that means second travel of that day was made
+      if((CalculateDaysCurrent > 0) && (currentDate.getHours() > 22) && (dayOfWeek > 0 && dayOfWeek < 6)){
           --CalculateDaysCurrent;
       }
       this.setState({busCurrentPrice : CalculateDaysCurrent * valueBusPrice});
